@@ -157,6 +157,7 @@ def main():
             st.write(f"O menor caminho é: {caminho}")
     with col2:    
         desenhar_grafo(grafo)
+        st.write("Criado por Marcus Schebek")
 
 if __name__ == "__main__":
     main()
