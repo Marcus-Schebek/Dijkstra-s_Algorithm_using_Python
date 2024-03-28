@@ -80,7 +80,7 @@ class Dikstra:
         caminho.insert(0, self.origem.nome)
         return caminho
 
-def desenhar_grafo(grafo):
+def desenhar_grafo(grafo, caminho):
     nos = [{"data": {"id": v}} for v in grafo.vertices]
     arestas = []
     for v in grafo.vertices.values():
@@ -107,22 +107,28 @@ def desenhar_grafo(grafo):
                 'width': 2,
                 'label': 'data(label)',
                 'font-size': 12,
-                'text-halign': 'right',
-                'text-valign': 'top',
-                'text-margin-x': -7,
-                'text-margin-y': -5,
+                'text-halign': 'left',
+                'font-weight':'bold',
+                'text-valign': 'bottom',
+                'text-margin-x': -2,
+                'text-margin-y': -2,
                 'color': '#FFFFFF'
             }
         }
     ]
-        
+    for i in range(len(caminho)-1):
+        for aresta in arestas:
+            if (aresta['data']['source'] == caminho[i] and aresta['data']['target'] == caminho[i+1] or aresta['data']['target'] == caminho[i] and aresta['data']['source'] == caminho[i+1]):
+                aresta['selected'] = True
     for no in nos:
         no['grabbable'] = False
     st_cytoscape.cytoscape(elements=elementos, stylesheet=stylesheet)
 
+
 def main():
     grafo = Grafo()
-    
+    if 'caminho' not in st.session_state:
+        st.session_state.caminho = []
     col1, col2 = st.columns([1, 1.25])
 
     with col1:
@@ -153,10 +159,10 @@ def main():
         if st.button('Calcular menor caminho'):
             dikstra = Dikstra(grafo, grafo.origem, grafo.destino)
             dikstra.calcular_menor_caminho()
-            caminho = dikstra.obter_caminho()
-            st.write(f"O menor caminho é: {caminho}")
+            st.session_state.caminho = dikstra.obter_caminho()
+            st.write(f"O menor caminho é: {st.session_state.caminho}")
     with col2:    
-        desenhar_grafo(grafo)
+        desenhar_grafo(grafo, st.session_state.caminho)
         st.write("Criado por Marcus Schebek")
 
 if __name__ == "__main__":
