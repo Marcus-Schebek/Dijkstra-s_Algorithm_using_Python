@@ -112,7 +112,7 @@ def desenhar_grafo(grafo, caminho):
                 'text-valign': 'bottom',
                 'text-margin-x': -2,
                 'text-margin-y': -2,
-                'color': '#FFFFFF'
+                'color': '#FFFFFF',            
             }
         }
     ]
